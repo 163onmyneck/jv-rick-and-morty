@@ -27,7 +27,8 @@ public class RickAndMortyClient {
         try {
             while (url != null && !url.isEmpty()) {
                 HttpResponse<String> response = fetchData(url);
-                CharacterResponseDataDto pageData = objectMapper.readValue(response.body(), CharacterResponseDataDto.class);
+                CharacterResponseDataDto pageData = objectMapper.readValue(response.body(),
+                        CharacterResponseDataDto.class);
                 allCharacters.addAll(pageData.getResults());
                 url = pageData.getInfo().getNext();
             }
