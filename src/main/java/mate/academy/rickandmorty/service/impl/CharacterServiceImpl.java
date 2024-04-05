@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CharacterServiceImpl implements CharacterService {
-    private static final Random random = new Random();
+    private final Random random = new Random();
     private final RickAndMortyClient rickAndMortyClient;
     private final CharacterMapper characterMapper;
     private final CharacterRepository characterRepository;
