@@ -1,8 +1,10 @@
 package mate.academy.rickandmorty.dto.internal;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class CharacterRequestDto {
     private Long id;
     private Long externalId;

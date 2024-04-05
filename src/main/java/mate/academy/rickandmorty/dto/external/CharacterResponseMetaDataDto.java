@@ -1,8 +1,10 @@
 package mate.academy.rickandmorty.dto.external;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class CharacterResponseMetaDataDto {
     private String count;
     private String pages;

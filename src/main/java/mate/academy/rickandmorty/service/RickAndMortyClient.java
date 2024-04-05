@@ -7,6 +7,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.rickandmorty.dto.external.CharacterResponseDataDto;
@@ -21,20 +22,26 @@ public class RickAndMortyClient {
     private final ObjectMapper objectMapper;
 
     public List<CharacterResponseDto> fetchCharacters() {
+        List<CharacterResponseDto> allCharacters = new ArrayList<>();
+        String url = URL;
         try {
-            return fetchData().getResults();
+            while (url != null && !url.isEmpty()) {
+                HttpResponse<String> response = fetchData(url);
+                CharacterResponseDataDto pageData = objectMapper.readValue(response.body(), CharacterResponseDataDto.class);
+                allCharacters.addAll(pageData.getResults());
+                url = pageData.getInfo().getNext();
+            }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+        return allCharacters;
     }
 
-    public CharacterResponseDataDto fetchData() throws IOException, InterruptedException {
+    public HttpResponse<String> fetchData(String url) throws IOException, InterruptedException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create(URL))
+                .uri(URI.create(url))
                 .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, BodyHandlers.ofString());
-
-        return objectMapper.readValue(response.body(), CharacterResponseDataDto.class);
+        return httpClient.send(httpRequest, BodyHandlers.ofString());
     }
 }
